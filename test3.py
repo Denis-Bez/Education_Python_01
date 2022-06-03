@@ -1,6 +1,6 @@
 
 def calculate(x, y):
-    x = x - y
+    x = x + y
 
     return x
 
