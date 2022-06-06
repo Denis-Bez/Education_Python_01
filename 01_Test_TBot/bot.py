@@ -1,6 +1,6 @@
 import requests
 from datetime import datetime
-from auth_bot import token
+from config import token
 import telebot
 
 
