@@ -26,7 +26,7 @@ def telegram_bot(token):
             try:
                 quote = get_data()
                 bot.send_message(message.chat.id, quote)
-            except Exeption as ex:
+            except Exception as ex:
                 print(ex)
                 bot.send_message(
                     message.chat.id, 
