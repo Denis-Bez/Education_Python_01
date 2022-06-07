@@ -1,0 +1,110 @@
+/*Создание переменных*/
+:root {
+    --color1: #05b1b1;
+    --color2: #52339a;
+}
+
+/*Отступы между блоками - 100 и 200 по краям - 0*/
+header, footer, section {
+    padding: 100px 0;
+}
+header {
+    padding: 200px 0;
+}
+/*Создание градиентного фона с рисунком*/
+header, footer {
+    background: url(content/pict1.jpg), var(--color1);
+    background: url(content/pict1.jpg), -moz-linear-gradient(left, var(--color1) 0%, #207cca 50%, #2989d8 50%, #207cca 50%, var(--color2) 100%);
+    background:url(content/pict1.jpg), -webkit-linear-gradient(left, var(--color1) 0%,#207cca 50%,#2989d8 50%,#207cca 50%, var(--color2) 100%);
+    background: url(content/pict1.jpg), linear-gradient(to right, var(--color1) 0%,#207cca 50%,#2989d8 50%,#207cca 50%, var(--color2) 100%);
+    filter: url(content/pict1.jpg), progid:DXImageTransform.Microsoft.gradient( startColorstr=var(--color1), endColorstr=var(--color2),GradientType=1 );
+    background-size: contain;
+}
+/*my уникальный префикс для моих классов, чтобы они не повторялись как в Брустрапе*/
+.my-play {
+    background-color: var(--color1);
+    /*Размеры квадрата*/
+    width: 60px;
+    height: 60px;
+    /*Квадрат превращаем в круг*/
+    border-radius: 50%;
+    /*Следующие 3 строки выравнивают содержимое элемента внутри посередине, вертикали и горизонтали */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*Чтобы при наведение выглядела как кнопка*/
+    cursor: pointer;
+    /*Чтобы элемент разместился по центру*/
+    margin: 30px auto 30px;
+    /*Чтобы была плавная анимация при наведении*/
+    transition: all 0.2s ease;
+}
+/*Изменение цвета при наведении*/
+.my-play:hover {
+    background-color: var(--color2);
+}
+/*Создаем треугольник*/
+.my-triangle {
+    margin-right: -3px; /*Сдвигаем, чтобы находился по центру*/
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 0 10px 20px;
+    border-color: transparent transparent transparent var(--bs-white); /*var(--bs-white) - Бутсраповская переменная*/
+}
+/*Кнопка*/
+.my-btn {
+    display: block;
+    max-width: 200px; /*Максимальная ширина*/
+    margin: 0 auto; /*Выравниваем по центру*/
+    padding: 8px, 30px;
+    color: var(--bs-white);
+    background-color: var(--color2);
+}
+.my-btn:hover {
+    color: var(--bs-white);
+    background-color: var(--color1);
+}
+
+/*Section*/
+/*Цвет текста*/
+.color1 {
+    color: var(--color1);
+}
+.color2 {
+    color: var(--color2);
+}
+.bg1 {
+    background-color: var(--color1);
+}
+.bg2 {
+    background-color: var(--color2);
+}
+.about {
+    background-color: #eee;
+}
+/*Для тега i класса about*/
+.about i {
+    font-size: 25px; /*Размер*/
+    color: var(--color2);
+}
+.my-circle {
+    margin: 0 auto 15px;
+    width: 70px;
+    height: 70px;
+    border: 3px solid var(--color2);
+    border-radius: 50%; /*Без этього свойства будет квадрат*/
+    display: flex; /*Чтобы отцентрировать*/
+    justify-content: center; /*Центрирование по горизонтале*/
+    align-items: center; /*Центрируем по вертикали*/
+}
+.line {
+    width: 100px;
+    height: 3px;
+    background-color: var(--color1);
+    margin: 15px auto 30px;
+}
+/*Аккардеон*/
+.my-acc1 {
+    background-image: url(content/pict1.jpg);
+}
