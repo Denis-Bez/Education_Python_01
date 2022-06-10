@@ -1,8 +1,11 @@
+from turtle import title
 from flask import Flask, render_template, redirect, flash, url_for, session, request, abort, g
+from config import CONFIG
 import sqlite3
 import os
+from FDataBase import FDataBase
 
-DATABASE = '/tmp/flsite.db' # Если мы ниже определяем путь к БД, зачем эта строчка?
+#DATABASE = '/tmp/flsite.db' # Если мы ниже определяем путь к БД, зачем эта строчка?
 DEBUG = True
 SECRET_KEY = CONFIG['SECRET_KEY']
 
@@ -21,7 +24,6 @@ def connect_db():
     conn.row_factory = sqlite3.Row
     return conn
 
-
 def create_db():
     # Создание таблиц в БД
     db = connect_db()
@@ -29,6 +31,7 @@ def create_db():
         db.cursor().executescript(f.read())
     db.commit()
     db.close()
+
 
 def get_db():
     # Соединение с базой данных, если оно ещё не установлено
@@ -46,7 +49,25 @@ def close_db(error):
 @application.route('/')
 def index():
     db = get_db()
-    return render_template('index.html')
+    dbase = FDataBase(db)
+    return render_template('index.html', menu = dbase.getMenu())
+
+@application.route('/add_post', methods=['POST', 'GET'])
+def add_post():
+    db = get_db()
+    dbase = FDataBase(db)
+
+    if request.method == 'POST':
+        if len(request.form['name']) > 4 and len(request.form['post']) > 10:
+            res = dbase.addPost(request.form['name'], request.form['post'])
+            if not res:
+                flash('Ошибка добавления статьи', category='error')
+            else:
+                flash('Статья добавлена успешно', category='success')
+        else:
+            flash('Ошибка добавления статьи. Короткие имя или текст статьи', category='error')
+
+    return render_template('add_post.html', menu = dbase.getMenu(), title='Добавление статьи')
 
 
 if __name__ == "__main__":
