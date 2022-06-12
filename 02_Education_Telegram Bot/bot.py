@@ -1,3 +1,4 @@
+# Бот на библиотеке pyTelegramBotAPI
 import requests
 from datetime import datetime
 from config import token
