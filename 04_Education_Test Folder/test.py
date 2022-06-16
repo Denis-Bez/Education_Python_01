@@ -1,4 +1,5 @@
 import re
+import time
 
 #from config import IYUTEER
 #import matplotlib.pyplot as plt
@@ -6,14 +7,18 @@ import re
 
 
 
+def calculate():
+    
+    x = 0
+
+    for i in range(0, 100000000):
+        x += 1
+    
+    return x
+
+
 def main():
-
-    a = 'cat'
-    b = a.join('d', 'kyzya')
-    print(b)
-
-
-
+    print(type(calculate()))
 
 
 
@@ -60,6 +65,12 @@ def main():
     
     
 if __name__ == "__main__":
+
+# Помогает оценить скорость выполнения программы
+    print(time.strftime('%X'))
+
     main()
+
+    print(time.strftime('%X'))
 
 
