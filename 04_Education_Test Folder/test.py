@@ -6,23 +6,19 @@ import time
 #import pandas as pd
 
 
-
-def calculate():
-    
-    x = 0
-
-    for i in range(0, 100000000):
-        x += 1
-    
-    return x
-
-
 def main():
-    print(type(calculate()))
+    
 
 
 
 
+
+
+# Assing an arrey
+""" def main():
+    a = [1, 2]
+    b, c = a
+    print(f'b={b} c={c}') """
 
 
 # Delite simbols in text

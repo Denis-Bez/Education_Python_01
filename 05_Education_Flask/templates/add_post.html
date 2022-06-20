@@ -3,8 +3,11 @@
 
 {% block body %}
 
-{% for cat, msg in get_flashed_messages(True) %}
-<div class="flash {{cat}}">{{msg}}</div>
+{% for category, msg in get_flashed_messages(True) %}
+<div class="alert alert-{{category}} alert-dismissible fade show text-center" role="alert">
+  <button type="button" class="btn-close text-end" data-bs-dismiss="alert" aria-label="Close"></button>
+  {{ msg }}
+</div>
 {% endfor %}
 
 <div class="container my-3">
@@ -12,15 +15,15 @@
 
 <form action="{{url_for('add_post')}}" method="post">
     <div class="mb-3">
-      <label for="exampleInputEmail1" name="name" class="form-label">Название статьи</label>
-      <input type="text" class="form-control" id="exampleInputEmail1">
+      <label for="InputName" class="form-label">Название статьи</label>
+      <input type="text" class="form-control" id="InputName" name="name">
     </div>
     <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Текст статьи:</label>
-      <textarea class="form-control" id="exampleInputPassword1" rows=7 cols=40 name="post"></textarea>
+      <label for="InputText" class="form-label">Текст статьи:</label>
+      <textarea class="form-control" id="InputText" rows=7 cols=40 name="post"></textarea>
     </div>
     <button type="submit" class="btn btn-primary">Добавить статью</button>
-  </form>
+</form>
 
 </div>
 </div>

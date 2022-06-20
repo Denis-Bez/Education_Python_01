@@ -4,18 +4,18 @@ from config import CONFIG
 import sqlite3
 import os
 from FDataBase import FDataBase
+import time
+import math
 
-#DATABASE = '/tmp/flsite.db' # Если мы ниже определяем путь к БД, зачем эта строчка?
+#DATABASE = '/tmp/flsite.sqlite' # Если мы ниже определяем путь к БД, зачем эта строчка?
 DEBUG = True
 SECRET_KEY = CONFIG['SECRET_KEY']
 
 application = Flask (__name__)
 
-# Создадим начальную конфигурацию приложения. По соглашению, переменные записанные заглавными буквами относятся к конфигурационной информации
+# Create start configuration of application
 application.config.from_object(__name__)
-
-# Переопределим путь к базе данных
-application.config.update(dict(DATABASE=os.path.join(application.root_path, 'flsite.db')))
+application.config.update(dict(DATABASE=os.path.join(application.root_path, 'flsite.sqlite'))) # Redefine path to database
 
 
 def connect_db():
@@ -25,7 +25,7 @@ def connect_db():
     return conn
 
 def create_db():
-    # Создание таблиц в БД
+    # Create table in database
     db = connect_db()
     with application.open_resource('sq_db.sql', mode='r') as f:
         db.cursor().executescript(f.read())
@@ -41,7 +41,7 @@ def get_db():
 
 @application.teardown_appcontext # Срабатывает тогда, когда происходит уничтожение контекста приложения
 def close_db(error):
-    # Закрываем соединение с БД, если оно было установлено
+    # Disconnect data base, if it was connected
     if hasattr(g, 'link_db'):
         g.link_db.close()
 
@@ -50,7 +50,8 @@ def close_db(error):
 def index():
     db = get_db()
     dbase = FDataBase(db)
-    return render_template('index.html', menu = dbase.getMenu())
+    return render_template('index.html', menu = dbase.getMenu(), posts=dbase.getPostsAnonce())
+
 
 @application.route('/add_post', methods=['POST', 'GET'])
 def add_post():
@@ -61,13 +62,23 @@ def add_post():
         if len(request.form['name']) > 4 and len(request.form['post']) > 10:
             res = dbase.addPost(request.form['name'], request.form['post'])
             if not res:
-                flash('Ошибка добавления статьи', category='error')
+                flash('Ошибка добавления статьи', category='danger')
             else:
                 flash('Статья добавлена успешно', category='success')
         else:
-            flash('Ошибка добавления статьи. Короткие имя или текст статьи', category='error')
+            flash('Ошибка добавления статьи. Короткие имя или текст статьи', category='danger')
 
     return render_template('add_post.html', menu = dbase.getMenu(), title='Добавление статьи')
+
+@application.route('/post/<int:id_post>')
+def showPost(id_post):
+        db = get_db()
+        dbase = FDataBase(db)
+        title, post = dbase.getPost(id_post)
+        if not title:
+            abort(404)
+        
+        return render_template('post.html', menu=dbase.getMenu(), title=title, post=post)
 
 
 if __name__ == "__main__":
