@@ -3,3 +3,4 @@
 .repose3
 config.py
 __pycache__
+.env
