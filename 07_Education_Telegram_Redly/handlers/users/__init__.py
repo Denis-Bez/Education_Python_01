@@ -5,6 +5,7 @@ from .hello import dp
 from .menu import dp
 from .buttons import dp
 from .inline_menu import dp
+from .register import dp
 
 # This command must be in the end
 from .error import dp 
