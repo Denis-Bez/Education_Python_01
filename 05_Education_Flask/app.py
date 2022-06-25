@@ -1,4 +1,3 @@
-from turtle import title
 from flask import Flask, render_template, redirect, flash, url_for, session, request, abort, g
 from config import CONFIG
 import sqlite3
@@ -11,6 +10,7 @@ import math
 DEBUG = True
 SECRET_KEY = CONFIG['SECRET_KEY']
 
+
 application = Flask (__name__)
 
 # Create start configuration of application
@@ -19,7 +19,7 @@ application.config.update(dict(DATABASE=os.path.join(application.root_path, 'fls
 
 
 def connect_db():
-    # Устанавливаем соединение с базой данных
+    # Connecting with database
     conn = sqlite3.connect(application.config['DATABASE'])
     conn.row_factory = sqlite3.Row
     return conn
@@ -60,7 +60,7 @@ def add_post():
 
     if request.method == 'POST':
         if len(request.form['name']) > 4 and len(request.form['post']) > 10:
-            res = dbase.addPost(request.form['name'], request.form['post'])
+            res = dbase.addPost(request.form['name'], request.form['post'], request.form['url'])
             if not res:
                 flash('Ошибка добавления статьи', category='danger')
             else:
@@ -70,11 +70,12 @@ def add_post():
 
     return render_template('add_post.html', menu = dbase.getMenu(), title='Добавление статьи')
 
-@application.route('/post/<int:id_post>')
-def showPost(id_post):
+# Page of post
+@application.route('/post/<alias>')
+def showPost(alias):
         db = get_db()
         dbase = FDataBase(db)
-        title, post = dbase.getPost(id_post)
+        title, post = dbase.getPost(alias)
         if not title:
             abort(404)
         

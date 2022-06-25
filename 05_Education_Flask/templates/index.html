@@ -12,7 +12,7 @@
 <ul class="list-group my-5">
     {% for p in posts -%}
     <li class="list-group-item">
-        <p class="btn btn-info"><a href="{{ url_for('showPost', id_post=p.id) }}">{{ p.title }}</a></p>
+        <p class="btn btn-info"><a href="{{ url_for('showPost', alias=p.url) }}">{{ p.title }}</a></p>
         <p class="blockquote-footer">{{ p.text[:50] }}</p>
     </li>
     {% endfor -%}
