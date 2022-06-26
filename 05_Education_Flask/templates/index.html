@@ -13,7 +13,8 @@
     {% for p in posts -%}
     <li class="list-group-item">
         <p class="btn btn-info"><a href="{{ url_for('showPost', alias=p.url) }}">{{ p.title }}</a></p>
-        <p class="blockquote-footer">{{ p.text[:50] }}</p>
+        <!-- Filter 'striptags' delete tags from text -->
+        <p class="blockquote-footer">{{ p.text[:50] | striptags }}</p>
     </li>
     {% endfor -%}
 </ul>

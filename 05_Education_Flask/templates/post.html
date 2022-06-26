@@ -4,6 +4,7 @@
 {% block body %}
 {{ super() }}
 
-{{ post }}
+<!-- Using filter 'safe'. Disable shielding.  -->
+{{ post | safe }}
 
 {% endblock %}
