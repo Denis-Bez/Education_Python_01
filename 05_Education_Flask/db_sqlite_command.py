@@ -8,9 +8,7 @@ def main():
         sqlite_connection = sqlite3.connect('flsite.sqlite')
         cursor = sqlite_connection.cursor()
 
-        #query = input('Please, input sql query\n')
-
-        query = 'CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, text TEXT NOT NULL, url TEXT NOT NULL, time INTEGER NOT NULL);'
+        query = input('Please, input sql query\n')
 
         cursor.execute(query)
         #cursor.fetchall() # For fetch tuples from table
@@ -29,9 +27,9 @@ def main():
 if __name__ == "__main__":
     main()
 
-# List sql-query template
+# List sql-query template:
 
 # INSERT INTO test (title, text, time) VALUES ('Kuzya', 'Good cat', '11')
 # DELETE FROM test WHERE id = 1;
 # DROP TABLE test;
-# 
+# INSERT INTO mainmenu (title, url) VALUES ('Авторизация', '/login')
