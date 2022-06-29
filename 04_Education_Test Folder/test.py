@@ -1,14 +1,26 @@
 import re
 import time
 
+import requests
+
 #from config import IYUTEER
 #import matplotlib.pyplot as plt
 #import pandas as pd
 
+HEADERS = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36', 'accept': '*/*'}
 
 def main():
-    
 
+    # html = requests.get('https://www.intimshop.ru/klitoralnii_stimulyator_s_vibraciei_satisfyer_curvy_1_bordovii_o139028.html', headers=HEADERS, timeout=20)
+    html = requests.get('https://www.ozon.ru/product/molochnaya-smes-kabrita-suhaya-na-osnove-kozego-moloka-dlya-detey-starshe-12-mesyatsev-800-g-160055585/?sh=yQWzKJ8lAw', headers=HEADERS, timeout=20)
+    html = requests.get('https://www.ozon.ru/product/molochnaya-smes-friso-pep-1-s-rozhdeniya-400-g-299041548/', headers=HEADERS, timeout=20)
+    html = requests.get('https://www.ozon.ru/product/molochnaya-smes-nestle-resource-clinutren-junior-zhidkaya-3-s-12-mesyatsev-so-vkusom-klubniki-200-g-189127875/?sh=yQWzKOGTIg', headers=HEADERS, timeout=20)
+    html = requests.get('https://www.ozon.ru/product/molochnaya-smes-goattiny-2-na-osnove-kozego-moloka-dlya-detey-ot-6-do-12-mesyatsev-400g-191580017/?advert=yQLMamTjuIHN0w_66AfJq_66UiNtdv2QPxQ20X2nBNjnmueSiJFQkM_b3K0Oaau6Rn0MuiGiA-12CseE95rxwGM3jZRJcYQOytUk6KOnA_9USvVl0EuF643Xmg&sh=yQWzKBaQFA', headers=HEADERS, timeout=20)
+    html = requests.get('https://www.ozon.ru/product/suhoy-molochnyy-napitok-dlya-detey-s-12-mesyatsev-bekari-3-na-osnove-ovechego-i-kozego-moloka-800-gr-309223318/?sh=yQWzKGNhDA', headers=HEADERS, timeout=20)
+
+    # print(html)
+    print(f'Выполнен 5 запросов к серверу сайта')
+    
 
 
 
@@ -63,10 +75,12 @@ def main():
 if __name__ == "__main__":
 
 # Помогает оценить скорость выполнения программы
-    print(time.strftime('%X'))
+    a = time.strftime('%X')
 
     main()
 
-    print(time.strftime('%X'))
+    b = time.strftime('%X')
+    print(a)
+    print(b)
 
 

@@ -1,17 +1,26 @@
-from datetime import datetime
 from flask import Flask, make_response, render_template, redirect, flash, url_for, session, request, abort, g, make_response
-from config import CONFIG
+# Class that controls all authorization
+from flask_login import LoginManager, login_required, login_user, login_required, logout_user, current_user
+
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
-import os
+
+# My custom classes
 from FDataBase import FDataBase
+from config import CONFIG
+from UserLogin import UserLogin
+from forms import LoginForm, RegisterForm
+
+import os
 import time
 import math
 import datetime
+from datetime import datetime
 
 #DATABASE = '/tmp/flsite.sqlite' # What for? 
 DEBUG = True
 SECRET_KEY = CONFIG['SECRET_KEY']
+MAX_CONTENT_LENGTH = 1024 * 1024 # Max value file that can download to server (bytes, 1 Mb)
 
 application = Flask (__name__)
 
@@ -20,6 +29,18 @@ application.config.from_object(__name__)
 application.config.update(dict(DATABASE=os.path.join(application.root_path, 'flsite.sqlite'))) # Redefine path to database
 # application.permanent_session_lifetime = datetime.timedelta(days=10) # To set custom session livetime
 
+login_manager = LoginManager(application)
+
+# If user unlogin we direct him to function 'login'
+login_manager.login_view = 'login'
+login_manager.login_message = 'Авторизуйтесь для доступа к закрытым страницам'
+login_manager.login_message_category = 'success'
+
+# Create and fills instanse 'UserLogin', on every request from user
+@login_manager.user_loader
+def load_user(user_id):
+    print('load_user')
+    return UserLogin().fromDB(user_id, dbase)
 
 def connect_db():
     # Connecting with database
@@ -86,6 +107,7 @@ def add_post():
 
 # Page of post
 @application.route('/post/<alias>')
+@login_required # limit access fot unlogin users
 def showPost(alias):
         title, post = dbase.getPost(alias)
         if not title:
@@ -94,30 +116,130 @@ def showPost(alias):
         return render_template('post.html', menu=dbase.getMenu(), title=title, post=post)
     
 
-@application.route('/login')
+# Authorizate function
+@application.route('/login', methods=['POST', 'GET'])
 def login():
 
-    return render_template('login.html', title='Авторизация')
+    # Redirect If user already have loged
+    if current_user.is_authenticated:
+        return redirect(url_for('profile'))
+
+    form = LoginForm()
+
+    # Validate so metod is "POST"
+    if form.validate_on_submit():
+        user = dbase.getUserByEmail(form.email.data)
+        if user and check_password_hash(user['psw'], form.psw.data):
+            userlogin = UserLogin().create(user)
+
+            # Use check box 'Запомнить меня'
+            rm = form.remember.data
+
+            # if 'remember=True' server remembers user
+            login_user(userlogin, remember=rm)
+            
+            # Return to previod pages (attribute 'next') if we crossed to 'profile' from other page (from page where we have need to logined before watching)
+            return redirect(request.args.get('next') or url_for('profile')) 
+        
+        flash('Неверная пара логин/пароль', category='danger')
+
+    return render_template('login.html', title='Авторизация', form=form)
+
+
+    # if request.method == 'POST':
+    #     user = dbase.getUserByEmail(request.form['email'])
+    #     if user and check_password_hash(user['psw'], request.form['psw']):
+    #         userlogin = UserLogin().create(user)
+
+    #         # Use check box 'Запомнить меня'
+    #         rm = True if request.form.get('remainme') else False
+
+    #         # if 'remember=True' server remembers user
+    #         login_user(userlogin, remember=rm)
+            
+    #         # Return to previod pages (attribute 'next') if we crossed to 'profile' from other page (from page where we have need to logined before watching)
+    #         return redirect(request.args.get('next') or url_for('profile')) 
+        
+    #     flash('Неверная пара логин/пароль', category='danger')
+
+    # return render_template('login.html', title='Авторизация')
 
 
 @application.route('/register', methods=['POST', 'GET'])
 def register():
 
-    if request.method == 'POST':
-        if len(request.form['name']) > 4 and len(request.form['email']) > 4\
-            and len(request.form['psw']) > 4 and request.form['psw'] == request.form['psw2']:
-
-            hash = generate_password_hash(request.form['psw'])
-            res = dbase.addUser(request.form['name'], request.form['email'], hash)
-            if res:
-                flash('Вы успешно зарегистрированы', category='success')
-                return redirect(url_for('login'))
-            else:
-                flash('Ошибка при добавлении в БД', category='danger')
+    form = RegisterForm()
+    if form.validate_on_submit():
+        hash = generate_password_hash(form.psw.data)
+        res = dbase.addUser(form.name.data, form.email.data, hash)
+        if res:
+            flash('Вы успешно зарегистрированы', category='success')
+            return redirect(url_for('login'))
         else:
-            flash('Неверно заполнены поля', category='danger')
+            flash('Ошибка при добавлении в БД', category='danger')
 
-    return render_template('register.html', title='Регистрация')
+    return render_template('register.html', title='Регистрация', form=form)
+
+
+# logout function
+@application.route('/logout')
+@login_required
+def logout():
+    logout_user() # clean session
+    flash('Вы вышли из аккаунта', 'success')
+    return redirect(url_for('login'))
+
+
+# User's profile
+@application.route('/profile')
+@login_required
+def profile():
+
+    return render_template('profile.html', title='Профиль')
+
+    # Version 1(old):
+    # return f""" <p><a href="{url_for('logout')}">Выйти из профиля</a>
+    #             <p>user info: {current_user.get_id()} """ # Call method 'get_id()' class 'UserLogin' with 'proxy user' 'current_user'
+
+
+@application.route('/userava')
+@login_required
+def userava():
+    img = current_user.getAvatar(application)
+    if not img:
+        return ''
+    
+    h = make_response(img)
+    h.headers['Content-Type'] = 'image/png'
+    return h
+
+
+@application.route('/upload', methods=['POST', 'GET'])
+@login_required
+def upload():
+    if request.method == 'POST':
+        file = request.files['file']
+        # check file. 'verifyExt', UserLogin's method
+        if file and current_user.verifyExt(file.filename):
+            try:
+                img = file.read()
+                # Update avatar in database (method updateUserAvatar --> class FDataBase)
+                res = dbase.updateUserAvatar(img, current_user.get_id())
+                if not res:
+                    flash('Ошибка обновления аватара', 'danger')
+                flash('Аватар обновлен', 'success')
+            except FileNotFoundError as e:
+                flash('Ошибка чтения файла', 'danger')
+        
+        else:
+            flash('Ошибка обновления аватара', 'danger')
+
+    return redirect(url_for('profile'))
+
+
+
+
+
 
 # Generate a server response
 #@application.route('/lesson_11')

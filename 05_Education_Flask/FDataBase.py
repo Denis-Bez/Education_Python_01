@@ -6,9 +6,11 @@ from flask import url_for
 
 
 class FDataBase:
+    # Constructor
     def __init__(self, db):
         self.__db = db
         self.__cur = db.cursor()
+
 
     # Method returns list of values from table "mainmenu"
     def getMenu(self):
@@ -21,6 +23,7 @@ class FDataBase:
             print('Ошибка чтения из БД')
         return [] # If error, it returns empty list
     
+
     # Method add post to table
     def addPost(self, title, text, url):
         try:
@@ -42,6 +45,7 @@ class FDataBase:
             return False
         
         return True
+
 
     # Get post from table "posts"
     def getPost(self, alias):
@@ -65,6 +69,7 @@ class FDataBase:
         
         return (False, False)
     
+
     # Getting post annonce
     def getPostsAnonce(self):
         try:
@@ -75,7 +80,8 @@ class FDataBase:
             print('Ошибка получения статьи из БД'+str(e))
         
         return []
-    
+
+
     # Add user register information
     def addUser(self, name, email, hpsw):
         try:
@@ -86,9 +92,56 @@ class FDataBase:
                 return False
             
             tm = math.floor(time.time())
-            self.__cur.execute('INSERT INTO users VALUES (NULL, ?, ?, ?, ?)', (name, email, hpsw, tm))
+            self.__cur.execute('INSERT INTO users VALUES (NULL, ?, ?, ?, NULL, ?)', (name, email, hpsw, tm))
             self.__db.commit()
         except sqlite3.Error as e:
             print('Ошибка добавления пользователя в БД'+str(e))
         
+        return True
+    
+
+    # Getting user's information at id
+    def getUser(self, user_id):
+        try:
+            self.__cur.execute(f'SELECT * FROM users WHERE id = {user_id} LIMIT 1')
+            res = self.__cur.fetchone()
+            if not res:
+                print('Пользователь не найден')
+                return False
+            
+            return res
+        except sqlite3.Error as e:
+            print('Ошибка получения данных из БД'+str(e))
+        
+        return False
+    
+
+    # identification user by email (function 'login')
+    def getUserByEmail(self, email):
+        try:
+            self.__cur.execute(f'SELECT * FROM users WHERE email = "{email}" LIMIT 1')
+            res = self.__cur.fetchone()
+            if not res:
+                print('Пользователь не найден')
+                return False
+            
+            return res
+        except sqlite3.Error as e:
+            print('Ошибка получения данных из БД'+str(e))
+        
+        return False
+    
+
+    def updateUserAvatar(self, avatar, user_id):
+        if not avatar:
+            return False
+        
+        try:
+            # Transfom file to binary object (method 'Binary')
+            binary = sqlite3.Binary(avatar)
+            self.__cur.execute(f'UPDATE users SET avatar = ? WHERE id = ?', (binary, user_id))
+            self.__db.commit()
+        except sqlite3.Error as e:
+            print('Ошибка обновления аватара в БД'+str(e))
+            return False
         return True

@@ -31,5 +31,5 @@ if __name__ == "__main__":
 
 # INSERT INTO test (title, text, time) VALUES ('Kuzya', 'Good cat', '11')
 # DELETE FROM test WHERE id = 1;
-# DROP TABLE test;
+# DROP TABLE users;
 # INSERT INTO mainmenu (title, url) VALUES ('Авторизация', '/login')

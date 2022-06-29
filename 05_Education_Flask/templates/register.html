@@ -10,11 +10,30 @@
 </div>
 {% endfor %}
 
-<div class="container my-3">
-    <div class="row">
-    <div class="col-4">
-    
-        <form action="/register" method="post">
+<form action="/register" method="post">
+
+      {{ form.hidden_tag() }}
+
+      {% for field in form if field.name not in ['csrf_token', 'submit'] -%}
+      <p>{{ field.label() }}
+        {% if field.errors %}
+          {{ field(class="form-control is-invalid") }}
+        <span class="invalid-feedback">
+          {% for e in field.errors %}
+          {{ e }}
+          {% endfor %}
+        </span>
+        {% else %}
+        {{ field(class="form-control") }}
+        {% endif %}
+        {% endfor %}
+
+    <p>{{ form.submit() }}
+    </form>
+
+
+   
+<!--         <form action="/register" method="post">
         
         <div class="mb-3">
           <label for="Name" class="form-label">Имя: </label>
@@ -33,7 +52,7 @@
             <input type="password" class="form-control" id="Password2" name="psw2">
         </div>
         <button type="submit" class="btn btn-primary">Войти</button>
-        </form>
+        </form> -->
     
     </div>
     </div>

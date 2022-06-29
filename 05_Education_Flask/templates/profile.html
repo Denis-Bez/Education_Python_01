@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+
+{% block body %}
+
+{% for category, msg in get_flashed_messages(True) %}
+<div class="alert alert-{{category}} alert-dismissible fade show text-center" role="alert">
+  <button type="button" class="btn-close text-end" data-bs-dismiss="alert" aria-label="Close"></button>
+  {{ msg }}
+</div>
+{% endfor %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <img src="{{ url_for('userava') }}">
+        </div>
+        <div class="col">
+            <p><a href="{{ url_for('logout') }}">Выйти из профиля</a></p>
+            <p>Имя: {{ current_user.getName() }}</p>
+            <p>Email: {{ current_user.getEmail() }}</p>  <!-- getName(), getEmail() - methods from class 'UserLogin' -->
+        </div>
+    </div>
+</div>
+
+
+<form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+<div class="input-group mb-3">
+    <label class="input-group-text" for="inputGroupFile01"></label>
+    <input type="file" class="form-control" id="inputGroupFile01" name="file">
+    <button type="submit" class="btn btn-primary">Загрузить</button>
+  </div>
+</form>
+
+
+{% endblock %}

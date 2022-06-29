@@ -14,22 +14,44 @@
     <div class="row">
     <div class="col-4">
     
-        <form action="/login" method="post">
-        <div class="mb-3">
-          <label for="Login" class="form-label">Логин</label>
-          <input type="text" class="form-control" id="Login" name="username">
+        <form action="" method="post"> <!-- for ' action="" ' will be taken current url with all parametrs -->
+        {{ form.hidden_tag() }} <!-- To protect against 'Cross-Site Request Forgery' -->
+          
+          <!-- 'field' was refer to variable in form (except: 'csrf_token', 'remember', 'submit')-->
+          <!-- order how in calss 'forms' -->
+          {% for field in form if field.name not in ['csrf_token', 'remember', 'submit'] -%}
+          <p>{{ field.label() }}
+            {% if field.errors %}
+              {{ field(class="form-control is-invalid") }}
+            <span class="invalid-feedback">
+              {% for e in field.errors %}
+              {{ e }}
+              {% endfor %}
+            </span>
+            {% else %}
+            {{ field(class="form-control") }}
+            {% endif %}
+            {% endfor %}
+
+        <p>{{ form.remember.label() }} {{ form.remember() }}
+        <p>{{ form.submit() }}
+        
+<!--         <div class="mb-3">
+          <label for="Login" class="form-label">Email</label>
+          <input type="text" class="form-control" id="Login" name="email">
         </div>
         <div class="mb-3">
           <label for="Password" class="form-label">Пароль</label>
-          <input type="password" class="form-control" id="Password" name="password">
+          <input type="password" class="form-control" id="Password" name="psw">
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+            <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="remainme">
             <label class="form-check-label" for="flexCheckDefault">
               Запомнить меня
             </label>
           </div>
-        <button type="submit" class="btn btn-primary">Войти</button>
+        <button type="submit" class="btn btn-primary">Войти</button> -->
+
         <p><a href="{{ url_for('register') }}">Регистрация</a>
         </form>
     
