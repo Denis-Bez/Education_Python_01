@@ -17,6 +17,9 @@ import math
 import datetime
 from datetime import datetime
 
+# Blueprint
+from admin.admin import admin
+
 #DATABASE = '/tmp/flsite.sqlite' # What for? 
 DEBUG = True
 SECRET_KEY = CONFIG['SECRET_KEY']
@@ -29,8 +32,11 @@ application.config.from_object(__name__)
 application.config.update(dict(DATABASE=os.path.join(application.root_path, 'flsite.sqlite'))) # Redefine path to database
 # application.permanent_session_lifetime = datetime.timedelta(days=10) # To set custom session livetime
 
-login_manager = LoginManager(application)
+# Blueprint configuration
+# admin blueprint will have url: 'domain/<url_prefix>/<URL-blueprint>'
+application.register_blueprint(admin, url_prefix='/admin')
 
+login_manager = LoginManager(application)
 # If user unlogin we direct him to function 'login'
 login_manager.login_view = 'login'
 login_manager.login_message = 'Авторизуйтесь для доступа к закрытым страницам'
@@ -78,7 +84,8 @@ def before_request():
     dbase = FDataBase(db)
 
 
-@application.teardown_appcontext # Срабатывает тогда, когда происходит уничтожение контекста приложения
+# Trigger when removed aplication's context
+@application.teardown_appcontext
 def close_db(error):
     # Disconnect data base, if it was connected
     if hasattr(g, 'link_db'):
