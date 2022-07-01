@@ -24,6 +24,9 @@ class Users(db.Model):
     psw = db.Column(db.String(500), nullable=True) # 'nullable=True' means that 'psw' should not be empty
     date = db.Column(db.DateTime, default=datetime.utcnow)
 
+    # Create the property that join 'users' and 'profiles'
+    pr = db.relationship('Profiles', backref='users', uselist=False)
+
     def __repr__(self):
         return f'<users {self.id}>'
 
@@ -43,7 +46,13 @@ class Profiles(db.Model):
 
 @app.route('/')
 def index():
-    return render_template('index.html', title='Главная')
+    info = []
+    try:
+        info = Users.query.all()
+    except:
+        print('Ошибка чтения из БД')
+
+    return render_template('index.html', title='Главная', list=info)
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -55,7 +64,7 @@ def register():
             hash = generate_password_hash(request.form['psw'])
             print(request.form['email'])
             u = Users(email=request.form['email'], psw=hash)
-            # Special object 'session' and method 'add'
+            # Special objec  t 'session' and method 'add'
             db.session.add(u)
             # Save data from 'session' to table (but it's RAM)
             db.session.flush()
@@ -69,8 +78,6 @@ def register():
             # Cancel changes if error
             db.session.rollback()
             print('Ошибка добавления в БД')
-            
-
 
     return render_template('register.html', title='Регистрация')
 
