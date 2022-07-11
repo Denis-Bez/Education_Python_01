@@ -7,41 +7,24 @@ import requests
 #import matplotlib.pyplot as plt
 #import pandas as pd
 
-menu = {
-'rus': {
-'dropmenu':[
-{'dropdown_item': {'url': 'services', 'title': 'Услуги'}, 'items': [{'url': 'parsers', 'title': 'Разработка Парсеров'},
-                                                                    {'url': 'telegram_bots', 'title': 'Разработка Telegram-ботов'},
-                                                                    {'url': 'webapp', 'title': 'Создание веб-приложений'}]}
-],
-'menu':[
-{'url': 'projects', 'title': 'Проекты'},
-{'url': 'contacts', 'title': 'Контакты'}
-]},
-
-'eng': {
-'dropmenu':[
-{'dropdown_item': {'url': '.services', 'title': 'Services'}, 'items': [{'url': '.parsers', 'title': 'Development parsers'},
-                                                                       {'url': '.telegram_bots', 'title': 'Development telegram-bots'},
-                                                                       {'url': '.webapp', 'title': 'Create web-application'}]}
-],
-'menu':[
-{'url': '.projects', 'title': 'Projects'},
-{'url': '.contacts', 'title': 'Contacts'}
-]}}
 
 def main():
-    m = {}
-    m = menu['eng']
+    n = 3
+    m = 2
+    sum = 0
 
-    for d in m['dropmenu'][0]['items']: 
-        print(d['url'])
+    for n in range(n, 0, -1):
+        for m in range(m, 0, -1):
+            if n > 1:
+                sum += 1
+            if m > 1:
+                sum += 1
+    
+    print(sum)
+
+
 
     
-
-
-
-
 
 # Assing an arrey
 """ def main():
