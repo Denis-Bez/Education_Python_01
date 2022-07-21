@@ -34,9 +34,6 @@ def rec(m, n):
 
     return rec(m-1, n) + rec(m, n-1)
 
-# def dynamic(m, n, lst):
-
-#     return helper(m, n, lst)
 
 def dynamic(m, n, lst):
     if m == 0 or n == 0:
