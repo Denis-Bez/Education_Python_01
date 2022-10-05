@@ -1,10 +1,16 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 
+from .models import *
+menu = ['About', 'Add article', 'Feedback', 'Sing in']
 
 # request (ссылка на класс HttpRequest) содержит информацию о сессиях о куках и т.д.
 def index(request):
-    return HttpResponse('Страница приложения women.')
+    posts = Women.objects.all()
+    return render(request, 'women/index.html', {'posts': posts, 'menu': menu, 'title': 'Main Page'})
+
+def about(request):
+    return render(request, 'women/about.html', {'menu': menu, 'title': 'About site'})
 
 def categories(request, catid):
     if (request.GET):
