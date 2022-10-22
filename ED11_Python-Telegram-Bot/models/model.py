@@ -13,4 +13,13 @@ class Bot_db(Base):
     message = Column(String)
 
     def __repr__(self):
-         return f"Group_Ads(id={self.id!r}, name={self.name!r}, product_id={self.product_id!r})"
+         return f"Bot_db(id={self.id!r}, name={self.name!r}, product_id={self.product_id!r})"
+    
+    def add_user(userid, message):
+        session = Session(engine)
+        Add_date = Bot_db(
+            user_id=userid,
+            message=message,
+        )
+        session.add_all([Add_date])
+        session.commit()

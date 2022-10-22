@@ -1,13 +1,13 @@
 from uuid import uuid4
 
+from time import time
 import pytz
 import datetime
 
 def b():
     # key = str(uuid4())
-        moscowZone = datetime.datetime.now(pytz.timezone('Europe/Moscow'))
-        print(moscowZone)
-        print(moscowZone.astimezone(pytz.timezone('Asia/Dhaka')))
+    a = time()
+    print(a)
 
 
 if __name__ == '__main__':

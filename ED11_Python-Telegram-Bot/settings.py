@@ -1,7 +1,8 @@
 from config import TOKEN
 
-from telegram.ext import filters, MessageHandler, ApplicationBuilder, CommandHandler, Defaults, Application
-from telegram.ext import InlineQueryHandler
+from telegram import Update
+from telegram.ext import filters, ApplicationBuilder, Defaults, Application
+from telegram.ext import InlineQueryHandler, TypeHandler, MessageHandler, CommandHandler
 from telegram.constants import ParseMode
 
 from handlers import handlers
@@ -18,11 +19,17 @@ application = (
     .build()
 )
 
+# Type handler
+application.add_handler(TypeHandler(Update, handlers.typehandler), -1)
+
 # Command handlers
 application.add_handler(CommandHandler('start', handlers.start))
 application.add_handler(CommandHandler('caps', handlers.caps))
 application.add_handler(CommandHandler('put', handlers.put))
 application.add_handler(CommandHandler('get', handlers.get))
+application.add_handler(CommandHandler('timer', handlers.callback_timer))
+application.add_handler(CommandHandler('sql', handlers.sql))
+application.add_handler(CommandHandler('menu', handlers.menu))
 
 
 # Message handlers
