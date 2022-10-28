@@ -34,7 +34,6 @@ application.add_handler(CommandHandler('menu', handlers.menu))
 
 # Message handlers
 unknown_handler = MessageHandler(filters.COMMAND, handlers.unknown)
-# application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handlers.echo))
 application.add_handler(unknown_handler)
 application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handlers.echo))
 
