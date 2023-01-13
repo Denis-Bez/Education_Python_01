@@ -7,16 +7,13 @@ from telegram.ext import ContextTypes
 
 from config import BOT_KEY
 
-application = ApplicationBuilder().token(BOT_KEY).build()
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await asyncio.sleep(20)
+    await asyncio.sleep(10)
     await update.message.reply_text(f"Hello, Hell!")
 
+application = ApplicationBuilder().token(BOT_KEY).build()
+application.add_handler(CommandHandler("start", start, block=False))
 
-application.add_handler(CommandHandler("start", start))
-
-
-if __name__ == '__main__':  
-    application.run_polling()
+application.run_polling()    
