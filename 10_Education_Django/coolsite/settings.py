@@ -20,6 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
+
+#### Superuser data (not used in code, just saved):
+# Name: root
+# Email: root@coolsite.ru
+# Password: root
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-q$^r++ja$(o(w_9ms2vhv7#j29xjqrn7ujhmn%xy^(_!zd*2k7'
 
@@ -38,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'women.apps.WomenConfig',
+    'women.apps.WomenConfig', # In 'app.py' in 'women' folder
 ]
 
 MIDDLEWARE = [
@@ -105,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-us' # Russian: 'ru'
 
 TIME_ZONE = 'UTC'
 
