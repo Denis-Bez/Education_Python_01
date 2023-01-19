@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 #### Superuser data (not used in code, just saved):
 # Name: root
 # Email: root@coolsite.ru
-# Password: root
+# Password: 1234
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-q$^r++ja$(o(w_9ms2vhv7#j29xjqrn7ujhmn%xy^(_!zd*2k7'
