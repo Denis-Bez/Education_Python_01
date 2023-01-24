@@ -4,7 +4,7 @@
 <h1>{{title}}</h1>
 
 
-<form action="{% url 'add_page' %}" method="post">
+<form action="{% url 'add_page' %}" method="post" enctype="multipart/form-data">
     <!-- Prtect from csrf attack -->
     {% csrf_token %}
     <!--Automation generate form: {{ form.as_p }} -->

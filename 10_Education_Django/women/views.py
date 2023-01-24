@@ -33,14 +33,19 @@ def addpage(request):
     
     # Don't clear fields if was error
     if request.method == 'POST':
-        form = AddPostForm(request.POST) # Dictionary with filled in field
-        if form.is_valid():
-            # print(form.cleaned_data)
-            try:
-                Women.objects.create(**form.cleaned_data) # Add to database
-                return redirect('home')
-            except:
-                form.add_error(None, 'Ошибка добваления поста')
+        form = AddPostForm(request.POST, request.FILES) # Dictionary with filled in field
+        
+        # Checking and Add to database, for Option 1 in 'forms.py'
+        # if form.is_valid():
+        #     print(form.cleaned_data)
+        #     try:
+        #         Women.objects.create(**form.cleaned_data) 
+        #         return redirect('home')
+        #     except:
+        #         form.add_error(None, 'Ошибка добваления поста')
+            
+        form.save() # Save to database
+        return redirect('home')
     else:
         form = AddPostForm()
 
