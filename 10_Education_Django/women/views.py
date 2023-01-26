@@ -43,9 +43,10 @@ def addpage(request):
         #         return redirect('home')
         #     except:
         #         form.add_error(None, 'Ошибка добваления поста')
-            
-        form.save() # Save to database
-        return redirect('home')
+        
+        if form.is_valid():
+            form.save() # Save to database
+            return redirect('home')
     else:
         form = AddPostForm()
 
