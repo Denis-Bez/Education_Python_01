@@ -35,7 +35,7 @@ class Category(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse('category', kwargs={'cat_id': self.pk}) # pk is internal attribute of Model. It's 'primary key'
+        return reverse('category', kwargs={'cat_slug': self.slug}) # pk is internal attribute of Model. It's 'primary key'
     
     class Meta:
         verbose_name = 'Category'
