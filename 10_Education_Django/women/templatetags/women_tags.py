@@ -5,7 +5,7 @@ register = template.Library()
 
 # This decorator turns function into tag
 @register.simple_tag(name='getcats')
-def get_categories(filte=None):
+def get_categories(filter=None):
     if not filter:
         return Category.objects.all()
     else:
