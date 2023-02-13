@@ -7,6 +7,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 from .forms import AddPostForm
 from .models import *
@@ -14,6 +15,7 @@ from .utils import *
 
 
 class WomenHome(DataMixin, ListView):
+    paginate_by = 3 # Class "Paginator" embedded in "ListView"
     model = Women
     template_name = 'women/index.html' # Django search (by default) template in path - "<app name>/<model name>_list.html"
     context_object_name = 'posts' # By default 'object_list'
@@ -46,7 +48,13 @@ class WomenHome(DataMixin, ListView):
 
 # @login_required # Access only authorized users (decorators for function, mixins for classes)
 def about(request):
-    return render(request, 'women/about.html', {'menu': menu, 'title': 'About site'})
+    # Pagination in view fuction
+    contact_list = Women.objects.all()
+    paginator = Paginator(contact_list, 3)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'women/about.html', {'page_obj': page_obj, 'menu': menu, 'title': 'About site'})
 
 
 class AddPage(LoginRequiredMixin, DataMixin, CreateView):
