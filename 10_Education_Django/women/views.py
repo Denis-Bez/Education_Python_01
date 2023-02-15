@@ -15,7 +15,7 @@ from .utils import *
 
 
 class WomenHome(DataMixin, ListView):
-    paginate_by = 3 # Class "Paginator" embedded in "ListView"
+    # paginate_by = 3 # Class "Paginator" embedded in "ListView". Relocate to mixin
     model = Women
     template_name = 'women/index.html' # Django search (by default) template in path - "<app name>/<model name>_list.html"
     context_object_name = 'posts' # By default 'object_list'
