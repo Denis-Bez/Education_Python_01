@@ -173,3 +173,7 @@ class WomenCategory(DataMixin, ListView):
 
 def pageNotFound(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+
+
+class RegisterUser(DataMixin, CreateView):
+    pass
