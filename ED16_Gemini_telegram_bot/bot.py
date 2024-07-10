@@ -1,6 +1,6 @@
 import logging
 from telegram import Update
-from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, filters
+from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, Filters
 from settings.config import TOKEN_BOT
 
 # Set up logging for debugging (optional)
@@ -22,7 +22,7 @@ def main():
     application = ApplicationBuilder().token(TOKEN_BOT).build()
 
     # Add the echo handler
-    echo_handler = MessageHandler(filters.TEXT & (~filters.COMMAND), echo)
+    echo_handler = MessageHandler(Filters.text & (~Filters.command), echo)
     application.add_handler(echo_handler)
 
     # Start the bot

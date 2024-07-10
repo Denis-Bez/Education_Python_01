@@ -1,40 +1,30 @@
-from telegram import Update
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+from telegram.ext import Updater, MessageHandler, Filters
 
 from settings.config import TOKEN
 
-# Function to start the bot
-def start(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text('Hi! I am an Echo Bot. Send me any message, and I will echo it back!')
-
-# Function to echo received messages
-def echo(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text(update.message.text)
-
-# Function to handle errors
-def error(update: Update, context: CallbackContext) -> None:
-    print(f'Update {update} caused error {context.error}')
+# Define a function to echo messages
+def echo(update, context):
+    # Get the message from the user
+    text = update.message.text
+    # Send the same message back to the user
+    update.message.reply_text(text)
 
 def main():
-    # Create the Updater and pass it your bot's token
+    # Create the Updater and pass in the bot's token
     updater = Updater(TOKEN, use_context=True)
 
     # Get the dispatcher to register handlers
-    dispatcher = updater.dispatcher
+    dp = updater.dispatcher
 
-    # On different commands - answer in Telegram
-    dispatcher.add_handler(CommandHandler("start", start))
-
-    # On non-command messages - echo the message on Telegram
-    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
-
-    # Log all errors
-    dispatcher.add_error_handler(error)
+    # Define a message handler for the /echo command
+    echo_handler = MessageHandler(Filters.text & (~Filters.command), echo)
+    dp.add_handler(echo_handler)
 
     # Start the Bot
     updater.start_polling()
+    print('Bot is running! Press Ctrl+C to exit.')
 
-    # Run the bot until you press Ctrl-C or the process receives SIGINT, SIGTERM or SIGABRT
+    # Run the bot until you press Ctrl+C
     updater.idle()
 
 if __name__ == '__main__':
